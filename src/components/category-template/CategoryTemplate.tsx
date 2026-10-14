@@ -1,0 +1,86 @@
+// --- Libraries
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router";
+
+// --- Local Components
+import FilterPanel from "@components/category-template/components/FilterPanel";
+import Products from "@components/category-template/components/Products";
+import CategoryPoster from "@components/category-poster/CategoryPoster";
+
+// --- Data
+import { categoryConfigs } from "@data/categoryConfigs";
+
+// --- Types
+import type { CurrentProductsType, CurrentPriceType, ProductType } from "@/types/types";
+
+type CategoryTemplateProps = {
+  imageSrc: string;
+  altText: string;
+  title: string;
+  currentCategoryKey: keyof typeof categoryConfigs;
+  loading: boolean;
+  error: string;
+  items: ProductType[];
+};
+
+// --- Main Component
+const CategoryTemplate = ({
+  imageSrc,
+  altText,
+  title,
+  currentCategoryKey,
+  loading,
+  error,
+  items,
+}: CategoryTemplateProps) => {
+  const [searchParams] = useSearchParams();
+  const [currentPrice, setCurrentPrice] = useState<CurrentPriceType>("no-sorting");
+
+  // Initialize from ?tab= query param if valid subcategory id
+  const getInitialTab = (): CurrentProductsType => {
+    const tab = searchParams.get("tab");
+    const config = categoryConfigs[currentCategoryKey];
+    const valid = config.subCategories.some((s) => s.id === tab);
+    return valid ? (tab as CurrentProductsType) : "all-products";
+  };
+
+  const [currentProducts, setCurrentProducts] = useState<CurrentProductsType>(getInitialTab);
+
+  const tabParam = searchParams.get("tab");
+
+  // Sync filter when URL ?tab= param changes (e.g. navigating via footer links)
+  useEffect(() => {
+    const config = categoryConfigs[currentCategoryKey];
+    const valid = config.subCategories.some((s) => s.id === tabParam);
+    setCurrentProducts(valid ? (tabParam as CurrentProductsType) : "all-products");
+  }, [tabParam, currentCategoryKey]);
+
+  // --- Return JSX
+  return (
+    <div>
+      <CategoryPoster className="my-5" imageSrc={imageSrc} altText={altText} />
+      <h1 className="relative w-fit mx-auto md:hidden text-center text-2xl font-bold text-primary my-5 font-jetbrains before:absolute before:w-[120%] before:h-0.75 before:bg-amber-400 before:rounded-[100%] before:left-1/2 before:-bottom-1 before:-translate-x-1/2">
+        {title}
+      </h1>
+      <div className="relative grid grid-cols-5 gap-5 mt-5 mb-35">
+        <FilterPanel
+          currentPrice={currentPrice}
+          setCurrentPrice={setCurrentPrice}
+          currentProducts={currentProducts}
+          setCurrentProducts={setCurrentProducts}
+          currentCategoryKey={currentCategoryKey}
+        />
+        <Products
+          key={`${currentProducts}-${currentPrice}`}
+          loading={loading}
+          error={error}
+          items={items}
+          currentPrice={currentPrice}
+          currentProducts={currentProducts}
+        />
+      </div>
+    </div>
+  );
+};
+export default CategoryTemplate;
+

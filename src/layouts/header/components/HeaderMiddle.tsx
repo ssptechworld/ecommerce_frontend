@@ -1,0 +1,240 @@
+// --- Libraries
+import { useMemo } from "react";
+import { Link, NavLink } from "react-router";
+
+// --- React Icons
+import { GrCart } from "react-icons/gr";
+import { FaUser, FaHeart } from "react-icons/fa";
+import { LuUserRoundCheck } from "react-icons/lu";
+import { LuUserRound } from "react-icons/lu";
+import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowUp } from "react-icons/io";
+import { BiBasket } from "react-icons/bi";
+import { MdOutlineDashboard } from "react-icons/md";
+import { IoHomeOutline, IoLocationOutline } from "react-icons/io5";
+
+// --- RTK
+import { useAppDispatch, useAppSelector } from "@app/hooks";
+import { logout } from "@features/auth/authSlice";
+
+// --- Local Components
+import CustomButton from "@components/custom-button/CustomButton";
+import SearchBar from "@layouts/header/components/SearchBar";
+
+// --- Utils
+import { cn } from "@utils/cn";
+
+// --- Types
+type HeaderMiddleProps = {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+// --- Main Component
+const HeaderMiddle = ({ isOpen, setIsOpen }: HeaderMiddleProps) => {
+  // --- Is Authenticated
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+
+  // --- Handle Drop Down Menu Button
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsOpen((prev) => !prev);
+  };
+
+  // --- Handle Logout
+  const handleLogout = () => {
+    if (isAuthenticated) {
+      dispatch(logout());
+      setIsOpen(false);
+    }
+  };
+
+  // --- Cart
+  const { cart } = useAppSelector((state) => state.cart);
+
+  // --- Wishlist
+  const { items: wishlistItems } = useAppSelector((state) => state.wishlist);
+
+  // --- Cart total calculations
+  const totalItems = useMemo(() => {
+    return cart.reduce((acc, cur) => acc + cur.count, 0);
+  }, [cart]);
+
+  // --- Return JSX
+  return (
+    <div className="middle-header flex items-center gap-5 md:gap-2.5">
+      {/* --- Header Search */}
+      <SearchBar />
+
+      {/* Header Middle Login & Cart */}
+      <div className="cart max-sm:absolute top-6 right-5 flex items-center gap-3 xl:mt-1.5">
+        {/* --- Login */}
+        <div>
+          {!isAuthenticated ? (
+            <NavLink
+              to="login"
+              aria-label="Login"
+              className={({ isActive }) =>
+                cn(
+                  "flex items-center justify-center text-center text-lg sm:text-xl lg:text-xl transition-colors duration-150 cursor-pointer w-25 h-8 md:h-9 lg:h-10 rounded-md max-sm:hidden",
+                  isActive
+                    ? "border-2 border-warning bg-warning text-primary"
+                    : "border-2 border-warning text-white hover:text-primary hover:bg-warning active:bg-amber-500",
+                )
+              }
+            >
+              Login
+            </NavLink>
+          ) : (
+            <div className="relative">
+              <button
+                type="button"
+                onClick={(e) => handleClick(e)}
+                aria-label="Toggle user menu"
+                className={cn(
+                  "group flex items-center gap-1 sm:gap-2.5 text-primary hover:bg-white transition-colors duration-300 px-1.5 py-0.5 rounded-md cursor-pointer",
+                  "relative before:absolute before:-top-1 before:left-0 before:w-full before:h-1 before:rounded-tr-md before:rounded-tl-md rounded-tr-none rounded-tl-none before:transition-colors before:duration-300",
+                  user?.role === "admin"
+                    ? isOpen
+                      ? "bg-white before:bg-red-500"
+                      : "bg-white/85 before:bg-red-400 hover:before:bg-red-500"
+                    : isOpen
+                      ? "bg-white before:bg-blue-500"
+                      : "bg-white/85 before:bg-blue-400 hover:before:bg-blue-500",
+                )}
+              >
+                <LuUserRoundCheck className="text-xl md:text-[30px]" />
+                <span className="truncate hidden font-semibold sm:block">{user?.fullName.split(" ")[0]}</span>
+                <span>{!isOpen ? <IoIosArrowDown /> : <IoIosArrowUp />}</span>
+              </button>
+
+              {/* Drop Down Menu */}
+              {isOpen && (
+                <div className="absolute flex flex-col top-11 max-sm:left-10 left-1/2 -translate-x-1/2 rounded-md bg-white shadow-sm w-50 h-fit overflow-hidden z-999">
+                  <div className="flex flex-col gap-2.5">
+                    {/* Only for admin */}
+                    {user?.role === "admin" && (
+                      <Link
+                        to="/admin"
+                        aria-label="Go To Admin Dashboard"
+                        onClick={() => setIsOpen(false)}
+                        className="text-primary p-2.5 border-b border-gray-400 flex items-center gap-2.5 font-semibold hover:bg-gray-300 font-jetbrains tracking-tighter"
+                      >
+                        <MdOutlineDashboard size={18} /> Dashboard
+                      </Link>
+                    )}
+
+                    {/* Shared Links */}
+                    <Link
+                      to="/"
+                      aria-label="Go to Home Page"
+                      onClick={() => setIsOpen(false)}
+                      className="text-primary p-2.5 border-b border-gray-400 flex items-center gap-2.5 font-semibold hover:bg-gray-300 font-jetbrains tracking-tighter"
+                    >
+                      <IoHomeOutline size={18} /> Home
+                    </Link>
+                    <Link
+                      to="/profile"
+                      aria-label="Go To Your Profile"
+                      onClick={() => setIsOpen(false)}
+                      className="text-primary p-2.5 border-b border-gray-400 flex items-center gap-2.5 font-semibold hover:bg-gray-300 font-jetbrains tracking-tighter"
+                    >
+                      <LuUserRound size={18} /> My Profile
+                    </Link>
+                    <Link
+                      to="/profile/orders"
+                      aria-label="Go To Your Profile Orders"
+                      onClick={() => setIsOpen(false)}
+                      className="text-primary p-2.5 border-b border-gray-400 flex items-center gap-2.5 font-semibold hover:bg-gray-300 font-jetbrains tracking-tighter"
+                    >
+                      <BiBasket size={18} /> My Orders
+                    </Link>
+                    <Link
+                      to="/profile/saved"
+                      aria-label="Go To Your Saved Items"
+                      onClick={() => setIsOpen(false)}
+                      className="text-primary p-2.5 border-b border-gray-400 flex items-center gap-2.5 font-semibold hover:bg-gray-300 font-jetbrains tracking-tighter"
+                    >
+                      <div className="relative">
+                        <FaHeart size={18} className="text-red-500" />
+                        {wishlistItems.length > 0 && (
+                          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                            {wishlistItems.length > 9 ? "9+" : wishlistItems.length}
+                          </span>
+                        )}
+                      </div>{" "}
+                      Saved Items
+                    </Link>
+                    <Link
+                      to="/profile/address/edit"
+                      aria-label="Go To Your Address Book"
+                      onClick={() => setIsOpen(false)}
+                      className="text-primary p-2.5 border-b border-gray-400 flex items-center gap-2.5 font-semibold hover:bg-gray-300 font-jetbrains tracking-tighter"
+                    >
+                      <IoLocationOutline size={18} /> Address Book
+                    </Link>
+                  </div>
+
+                  <CustomButton
+                    type="button"
+                    aria-label="Logout"
+                    onClick={handleLogout}
+                    className="w-37.5 mx-auto mt-auto my-5"
+                  >
+                    Logout
+                  </CustomButton>
+                </div>
+              )}
+            </div>
+          )}
+          {!isAuthenticated && (
+            <NavLink
+              to="login"
+              aria-label="Login"
+              className={({ isActive }) =>
+                cn(
+                  "text-xl transition-colors duration-150 cursor-pointer sm:hidden",
+                  isActive ? "text-warning" : "text-white hover:text-warning active:text-amber-500",
+                )
+              }
+            >
+              <FaUser />
+            </NavLink>
+          )}
+        </div>
+
+        {/* --- Cart */}
+        <div>
+          <NavLink
+            to={isAuthenticated ? "cart" : "login"}
+            aria-label="Cart"
+            className={({ isActive }) =>
+              cn(
+                "relative text-white flex items-end gap-1 xl:gap-0.5 cursor-pointer  border-b-2 border-dotted pb-1 hover:border-b-warning/50",
+                isActive ? "border-b-warning/50" : "border-b-transparent",
+              )
+            }
+          >
+            <GrCart className="text-2xl lg:text-3xl" />
+            <span className="text-lg lg:text-xl font-jetbrains">
+              Cart
+              {totalItems > 0 && (
+                <span className="absolute text-[12px] font-bold text-primary -top-3 left-2 lg:-top-3.5 lg:left-3.5 border-2 border-primary bg-warning rounded-full w-6 h-6 flex items-center justify-center">
+                  {totalItems > 99 ? (
+                    <span className="flex items-start text-[10px] leading-none tracking-tighter">
+                      99<span className="text-[8px] font-extrabold mt-0.5">+</span>
+                    </span>
+                  ) : (
+                    totalItems
+                  )}
+                </span>
+              )}
+            </span>
+          </NavLink>
+        </div>
+      </div>
+    </div>
+  );
+};
+export default HeaderMiddle;

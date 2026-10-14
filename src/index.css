@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  /* Breakpoints */
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-xxl: 1400px;
+
+  /* Fonts */
+  --font-jetbrains: "JetBrains Mono", monospace;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+
+  /* Color Tokens */
+  --color-body: #f8fafc;
+  --color-primary: #0f172a;
+  --color-secondary: #475569;
+  --color-accent: #6366f1;
+  --color-warning: #f59e0b;
+  --color-offer: #ef4444;
+  --color-success: #10b981;
+
+  /* Box Shadows */
+  --shadow-soft: rgba(149, 157, 165, 0.15) 0px 8px 24px;
+  --shadow-standard: rgba(0, 0, 0, 0.08) 0px 10px 15px -3px, rgba(0, 0, 0, 0.04) 0px 4px 6px -2px;
+  --shadow-strong: rgba(15, 23, 42, 0.15) 0px 20px 25px -5px, rgba(15, 23, 42, 0.08) 0px 8px 10px -6px;
+  --shadow-deep: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.custom-container {
+  @apply mx-auto px-4 sm:px-6 w-full max-w-7xl;
+}
+
+html {
+  @apply scroll-smooth antialiased;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 font-sans min-h-screen selection:bg-indigo-500 selection:text-white;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+/* Print Optimization */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}

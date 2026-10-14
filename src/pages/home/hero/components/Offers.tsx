@@ -1,0 +1,52 @@
+// --- Libraries
+import { useEffect, useRef, useState } from "react";
+
+// --- Offers Images
+const offerImages = [
+  { url: "/images/banners/offer1.webp", direction: "object-left" },
+  { url: "/images/banners/offer2.webp", direction: "object-right" },
+  { url: "/images/banners/offer3.webp", direction: "object-right" },
+  { url: "/images/banners/offer4.webp", direction: "object-center" },
+  { url: "/images/banners/offer5.webp", direction: "object-right" },
+];
+
+// --- Main Component
+const Offers = () => {
+  // --- Auto Carousel Animation Logic
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    timeoutRef.current = setTimeout(() => {
+      setIndex((prev) => (prev === offerImages.length - 1 ? 0 : prev + 1));
+    }, 5000);
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [index]);
+
+  // --- Return JSX
+  return (
+    <div className="w-full h-full rounded-md overflow-hidden shadow-deep relative">
+      {offerImages.map((offer, i) => (
+        <img
+          src={offer.url}
+          alt="Special offer banner"
+          key={i}
+          width="1200"
+          height="500"
+          fetchPriority={i === 0 ? "high" : "low"}
+          loading={i === 0 ? "eager" : "lazy"}
+          className={`w-full h-full absolute object-fill ${
+            offer.direction
+          } transition-opacity duration-1000 ease-in-out ${
+            index === i ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+          aria-hidden={index !== i}
+        />
+      ))}
+    </div>
+  );
+};
+export default Offers;
