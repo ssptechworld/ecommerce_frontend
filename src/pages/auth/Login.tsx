@@ -1,6 +1,6 @@
 // --- Libraries
-import { useState } from "react";
-import { Link, useLocation } from "react-router";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -8,7 +8,7 @@ import { Loader2 } from "lucide-react";
 
 // --- RTK & Auth Context
 import { useAppDispatch, useAppSelector } from "@app/hooks";
-import { loginUser } from "@features/auth/authSlice";
+import { loginUser, resetAuthState } from "@features/auth/authSlice";
 import { useAuth } from "@/context/useAuth";
 
 // --- Components
@@ -31,12 +31,17 @@ type LoginSchemaType = z.infer<typeof LoginSchema>;
 // --- Main Component
 const Login = () => {
   // --- Custom RTK Hooks & Auth State
-  const { loading } = useAppSelector((state) => state.auth);
+  const { loading, error: authError } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const [googleLoading, setGoogleLoading] = useState(false);
   const [serverError, setServerError] = useState("");
   const { signInWithGoogle } = useAuth();
+
+  useEffect(() => {
+    dispatch(resetAuthState());
+  }, [dispatch]);
 
   // --- React Hook Form Logic
   const {
@@ -60,8 +65,22 @@ const Login = () => {
   };
 
   // --- OnSubmit Function
-  const onSubmit: SubmitHandler<LoginSchemaType> = (data) => {
-    dispatch(loginUser(data));
+  const onSubmit: SubmitHandler<LoginSchemaType> = async (data) => {
+    setServerError("");
+    try {
+      const authenticatedUser = await dispatch(loginUser(data)).unwrap();
+      // Route strictly based on the authenticated user role returned by the backend API
+      if (authenticatedUser.role === "admin") {
+        navigate("/admin", { replace: true });
+      } else {
+        const fromPath = (location.state as { from?: { pathname?: string } })?.from?.pathname;
+        const safeTarget = fromPath && !fromPath.startsWith("/admin") ? fromPath : "/";
+        navigate(safeTarget, { replace: true });
+      }
+    } catch (err) {
+      const message = typeof err === "string" ? err : "Login failed. Please check your credentials.";
+      setServerError(message);
+    }
   };
 
   // --- Google Login Handler
@@ -77,6 +96,8 @@ const Login = () => {
       setGoogleLoading(false);
     }
   };
+
+  const displayedError = serverError || authError;
 
   // --- Return JSX
   return (
@@ -112,15 +133,18 @@ const Login = () => {
       </div>
 
       {/* Login Form */}
-      <div className="bg-white rounded-xl w-full max-w-md">
+      <div className="bg-white rounded-xl w-full max-w-md shadow-lg">
         <h2 className="text-2xl w-fit mx-auto text-primary mt-5 mb-2.5 font-jetbrains">Login</h2>
-        {serverError && (
-          <div className="mb-4 mx-5 sm:mx-10 text-sm text-red-600 bg-red-50 border border-red-200 p-2.5 rounded-md text-center">
-            {serverError}
+        {displayedError && (
+          <div
+            role="alert"
+            className="mb-4 mx-5 sm:mx-10 text-sm text-red-700 bg-red-50 border border-red-200 p-3 rounded-md text-center"
+          >
+            {displayedError}
           </div>
         )}
         <form
-          className="shadow-lg flex flex-col gap-5 max-sm:p-5 sm:px-10 sm:pb-10 rounded-lg w-full"
+          className="flex flex-col gap-5 max-sm:p-5 sm:px-10 sm:pb-10 rounded-lg w-full"
           onSubmit={handleSubmit(onSubmit)}
         >
           <InputField
@@ -156,9 +180,15 @@ const Login = () => {
             disabled={googleLoading || loading}
           >
             {googleLoading ? (
-              <><Loader2 className="h-4 w-4 mr-2 animate-spin" strokeWidth={1.75} />{t("auth.connecting")}</>
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" strokeWidth={1.75} />
+                {t("auth.connecting")}
+              </>
             ) : (
-              <><GoogleIcon className="h-4 w-4 mr-2.5" />{t("auth.continueWithGoogle")}</>
+              <>
+                <GoogleIcon className="h-4 w-4 mr-2.5" />
+                {t("auth.continueWithGoogle")}
+              </>
             )}
           </Button>
         </form>

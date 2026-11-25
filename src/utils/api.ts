@@ -1,4 +1,5 @@
 import axios from "axios";
+import { clearStoredAuthUser } from "@utils/authSession";
 
 const DEFAULT_DEV_API_URL = "http://localhost:5001/api";
 const DEFAULT_PROD_API_URL = "https://ecommerce-backend-y2b5.onrender.com/api";
@@ -15,6 +16,12 @@ export const API_BASE_URL = trimmedApiUrl
     : DEFAULT_DEV_API_URL;
 
 export const BACKEND_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
+
+let unauthorizedHandler: (() => void) | null = null;
+
+export const setUnauthorizedHandler = (handler: () => void) => {
+  unauthorizedHandler = handler;
+};
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -42,10 +49,13 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      window.localStorage.removeItem("user");
+      clearStoredAuthUser();
+      if (unauthorizedHandler) {
+        unauthorizedHandler();
+      }
       const currentPath = window.location.pathname;
       if (currentPath !== "/login" && currentPath !== "/register") {
-        window.location.href = "/login";
+        window.location.replace("/login");
       }
     }
     return Promise.reject(error);

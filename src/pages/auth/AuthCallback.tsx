@@ -30,7 +30,7 @@ const AuthCallback: React.FC = () => {
         };
 
         dispatch(setCredentials(userData));
-        navigate("/", { replace: true });
+        navigate(userData.role === "admin" ? "/admin" : "/", { replace: true });
       } catch (error) {
         console.error("Error fetching user profile after OAuth:", error);
         navigate("/login", { replace: true });

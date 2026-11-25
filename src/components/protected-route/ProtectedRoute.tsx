@@ -1,8 +1,13 @@
 // --- Libraries
+import { useEffect } from "react";
 import { Navigate, Outlet, useLocation } from "react-router";
 
 // --- RTK
-import { useAppSelector } from "@app/hooks";
+import { useAppDispatch, useAppSelector } from "@app/hooks";
+import { logout } from "@features/auth/authSlice";
+
+// --- Utils
+import { isTokenValid } from "@utils/authSession";
 
 // --- Types
 type ProtectedRouteProps = {
@@ -12,9 +17,18 @@ type ProtectedRouteProps = {
 // --- Main Component
 const ProtectedRoute = ({ adminOnly = false }: ProtectedRouteProps) => {
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   const location = useLocation();
 
-  if (!isAuthenticated) {
+  const hasValidSession = isAuthenticated && Boolean(user?.token) && isTokenValid(user?.token);
+
+  useEffect(() => {
+    if (isAuthenticated && !hasValidSession) {
+      dispatch(logout());
+    }
+  }, [dispatch, isAuthenticated, hasValidSession]);
+
+  if (!hasValidSession) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

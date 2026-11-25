@@ -341,6 +341,9 @@ customMiddleware.startListening({
   },
 });
 
+// --- Utils
+import { setUnauthorizedHandler } from "@utils/api";
+
 // --- Store
 
 const store = configureStore({
@@ -354,6 +357,10 @@ const store = configureStore({
     wishlist,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(customMiddleware.middleware),
+});
+
+setUnauthorizedHandler(() => {
+  store.dispatch(logout());
 });
 
 // --- Store Types

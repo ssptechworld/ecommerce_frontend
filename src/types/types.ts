@@ -111,7 +111,6 @@ export type RegisterType = {
   fullName: string;
   email: string;
   password: string;
-  phone: string;
 };
 
 export type LoginType = {

@@ -4,6 +4,7 @@ import axios from "axios";
 
 // --- Utils
 import api from "@utils/api";
+import { clearStoredAuthUser, getStoredAuthUser, saveStoredAuthUser } from "@utils/authSession";
 
 // --- Types
 import type { LoginType, RegisterType, UpdateProfileType, UserType, AuthResponseType } from "@/types/types";
@@ -12,14 +13,23 @@ import type { RootState } from "@app/store";
 // --- RTK
 import { updateUserRole } from "@features/users/usersSlice";
 
-// --- localStorage
-const storedUser = window.localStorage.getItem("user");
-const user: AuthResponseType | null = storedUser ? JSON.parse(storedUser) : null;
+// --- localStorage (validated against corruption & token expiration)
+const user: AuthResponseType | null = getStoredAuthUser();
 
 // --- Error Message
 const errorMsg = (error: unknown) => {
   if (axios.isAxiosError(error)) {
-    return error.response?.data?.message || "Server Error";
+    const data = error.response?.data as
+      | { message?: string; error?: string; errors?: Array<{ message?: string }> }
+      | string
+      | undefined;
+    if (typeof data === "string" && data.trim()) return data;
+    if (data && typeof data === "object") {
+      if (data.message) return data.message;
+      if (data.error) return data.error;
+      if (Array.isArray(data.errors) && data.errors[0]?.message) return data.errors[0].message;
+    }
+    return error.message || "Request failed";
   }
   return error instanceof Error ? error.message : "Something went wrong!";
 };
@@ -164,7 +174,7 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.isVerified = false;
       state.error = "";
-      window.localStorage.removeItem("user");
+      clearStoredAuthUser();
     },
     resetAuthState: (state) => {
       state.isVerified = false;
@@ -175,7 +185,7 @@ const authSlice = createSlice({
       state.user = action.payload;
       state.isAuthenticated = true;
       state.error = "";
-      window.localStorage.setItem("user", JSON.stringify(action.payload));
+      saveStoredAuthUser(action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -196,8 +206,11 @@ const authSlice = createSlice({
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.loading = false;
       state.user = action.payload;
-      state.isAuthenticated = true;
+      state.isAuthenticated = Boolean(action.payload?.token);
       state.error = "";
+      if (action.payload?.token) {
+        saveStoredAuthUser(action.payload);
+      }
     });
 
     // --- Reset Password Fulfilled
@@ -211,6 +224,7 @@ const authSlice = createSlice({
       state.loading = false;
       if (state.user) {
         state.user = { ...action.payload, token: state.user.token };
+        saveStoredAuthUser(state.user);
       }
       state.error = "";
     });
@@ -220,6 +234,7 @@ const authSlice = createSlice({
       state.loading = false;
       if (state.user?._id == action.payload._id) {
         state.user = { ...action.payload, token: state.user.token };
+        saveStoredAuthUser(state.user);
       }
       state.error = "";
     });
