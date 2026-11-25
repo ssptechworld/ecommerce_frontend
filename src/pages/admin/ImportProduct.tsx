@@ -6,6 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
+import axios from "axios";
 
 // --- RTK
 import { useAppDispatch, useAppSelector } from "@app/hooks";
@@ -13,6 +14,7 @@ import { fetchUsers } from "@features/users/usersSlice";
 
 // --- Utils
 import api from "@utils/api";
+import type { UserType } from "@/types/types";
 
 // --- Components
 import CustomButton from "@components/custom-button/CustomButton";
@@ -50,7 +52,7 @@ const ImportProduct = () => {
 
   const { users, loading: usersLoading } = useAppSelector((state) => state.users);
 
-  const [sellers, setSellers] = useState<any[]>([]);
+  const [sellers, setSellers] = useState<UserType[]>([]);
   const [inventory, setInventory] = useState<SellerInventoryItem[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<SellerInventoryItem | null>(null);
   const [inventoryLoading, setInventoryLoading] = useState(false);
@@ -142,15 +144,16 @@ const ImportProduct = () => {
       toast.success("Product successfully imported to live store!");
       reset();
       navigate("/admin/products");
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Failed to import product");
+    } catch (error: unknown) {
+      const msg = axios.isAxiosError(error) ? error.response?.data?.message : undefined;
+      toast.error(msg || "Failed to import product");
     } finally {
       setImporting(false);
     }
   };
 
   return (
-    <div className="flex-1 overflow-auto p-4 md:p-6 lg:p-8">
+    <div className="flex-1 overflow-auto p-1 sm:p-4 md:p-6">
       <div className="max-w-4xl mx-auto">
         {/* --- Header */}
         <div className="mb-8">
@@ -158,7 +161,7 @@ const ImportProduct = () => {
           <p className="text-primary/50 text-sm">Select a seller → pick their product → import it into the live store.</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-xl shadow-standard p-6 md:p-8 flex flex-col gap-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-xl shadow-standard p-4 sm:p-6 md:p-8 flex flex-col gap-8">
           {/* ============================== */}
           {/*       STEP 1 : SELECT SELLER    */}
           {/* ============================== */}

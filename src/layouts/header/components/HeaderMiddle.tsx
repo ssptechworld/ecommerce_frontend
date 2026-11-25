@@ -111,7 +111,7 @@ const HeaderMiddle = ({ isOpen, setIsOpen }: HeaderMiddleProps) => {
 
               {/* Drop Down Menu */}
               {isOpen && (
-                <div className="absolute flex flex-col top-11 max-sm:left-10 left-1/2 -translate-x-1/2 rounded-md bg-white shadow-sm w-50 h-fit overflow-hidden z-999">
+                <div className="absolute flex flex-col top-11 max-sm:right-0 max-sm:left-auto max-sm:translate-x-0 left-1/2 -translate-x-1/2 rounded-md bg-white shadow-lg w-50 max-w-[calc(100vw-2rem)] h-fit overflow-hidden z-999">
                   <div className="flex flex-col gap-2.5">
                     {/* Only for admin */}
                     {user?.role === "admin" && (

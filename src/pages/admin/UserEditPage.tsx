@@ -36,7 +36,7 @@ const Field = ({ title, description }: FieldProps) => {
           className={cn(
             "w-full bg-white border border-gray-300 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary",
             "text-sm px-1.5 py-3.5 caret-primary rounded-md placeholder:text-primary/50 placeholder:text-sm transition-[border-color,box-shadow] duration-500 ease-in-out pl-2.5",
-            "bg-gray-50 text-primary/50 cursor-not-allowed",
+            "bg-gray-50 text-primary/50 cursor-not-allowed break-all",
           )}
         >
           {description}
@@ -158,7 +158,7 @@ const UserEditPage = () => {
                   <option value="customer">Customer</option>
                   <option value="admin">Admin</option>
                 </select>
-                <CustomButton type="submit" className="w-35 mt-5 sm:ml-auto">
+                <CustomButton type="submit" className="w-full sm:w-35 mt-5 sm:ml-auto">
                   Save Changes
                 </CustomButton>
               </form>

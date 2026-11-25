@@ -70,19 +70,19 @@ const SpecialOfferCard = ({ specialOffer, isOdd }: SpecialOfferCardProps) => {
   return (
     <div
       className={cn(
-        "group relative bg-white shadow-soft rounded-md px-5 pt-5 pb-4 min-h-75 max-sm:h-115 hover:shadow-standard hover:scale-[1.01] transition-all duration-300 flex flex-col",
+        "group relative bg-white shadow-soft rounded-md px-4 sm:px-5 pt-5 pb-4 min-h-75 hover:shadow-standard hover:scale-[1.01] transition-all duration-300 flex flex-col gap-3",
         isOdd && "xl:last:col-span-2",
       )}
     >
       {/* Card Discount */}
-      <div className="bg-secondary text-white text-xl py-1 sm:w-37.5 text-center rounded-full sm:ml-auto">
+      <div className="bg-secondary text-white text-lg sm:text-xl py-1 px-4 sm:w-37.5 text-center rounded-full sm:ml-auto">
         {discount}% OFF
       </div>
 
       {/* Card Details */}
-      <div className="flex max-sm:flex-col items-center justify-center max-md:w-full max-lg:w-4/5 max-xl:w-3/5 mx-auto flex-1">
+      <div className="flex max-sm:flex-col items-center justify-center gap-4 w-full max-lg:w-4/5 max-xl:w-3/5 mx-auto flex-1">
         {/* Product Image */}
-        <div className="relative w-50 h-50 overflow-hidden rounded-md">
+        <div className="relative w-40 h-40 sm:w-50 sm:h-50 shrink-0 overflow-hidden rounded-md">
           {hasMultipleImages ? (
             <div className="flex w-full h-full transition-transform duration-500 ease-in-out group-hover:-translate-x-full">
               <img
@@ -118,7 +118,7 @@ const SpecialOfferCard = ({ specialOffer, isOdd }: SpecialOfferCardProps) => {
         </div>
 
         {/* Product Description */}
-        <div className="flex max-sm:items-center flex-col flex-1 xl:pl-5">
+        <div className="flex max-sm:items-center max-sm:text-center flex-col flex-1 min-w-0 xl:pl-5">
           <h3 className="text-primary max-xl:text-xl text-2xl font-medium line-clamp-1">{title}</h3>
           {/* --- Reviews */}
           <RatingAndViews rating={rating} reviews={reviewsCount} />
@@ -128,7 +128,7 @@ const SpecialOfferCard = ({ specialOffer, isOdd }: SpecialOfferCardProps) => {
       </div>
 
       {/* --- Bottom Action Row */}
-      <div className="flex items-center justify-between mt-3 pt-2 border-t border-gray-100">
+      <div className="flex flex-wrap items-center justify-between gap-2 mt-3 pt-2 border-t border-gray-100">
         {/* Add to Cart + Save buttons */}
         <div className="flex items-center gap-2">
           {/* Add to Cart */}

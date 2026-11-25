@@ -111,13 +111,13 @@ const ProductDetails = () => {
       {!loading && !error && singleProduct && (
         <div className="mb-10">
           <div className="bg-primary/10 my-5 sm:p-5 rounded-lg">
-            <div className="bg-white shadow-strong lg:w-3/4 mx-auto grid grid-cols-4 p-5 rounded-md">
+            <div className="bg-white shadow-strong lg:w-3/4 mx-auto grid grid-cols-4 gap-5 p-4 sm:p-5 rounded-md">
               <ProductImages images={singleProduct.images} title={singleProduct.title} />
 
               {/* Card Details */}
               <div className="col-span-4 md:col-span-2">
                 <div>
-                  <h1 className="text-primary text-[22px] font-medium underline decoration-warning mb-2.5 flex items-center gap-3">
+                  <h1 className="text-primary text-xl sm:text-[22px] font-medium underline decoration-warning mb-2.5 flex flex-wrap items-center gap-2 sm:gap-3">
                     {singleProduct.title}
                     {(singleProduct.stock === undefined || singleProduct.stock <= 0) && (
                       <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider no-underline">
@@ -132,7 +132,7 @@ const ProductDetails = () => {
                   <Discount price={singleProduct.price} discount={singleProduct.discount} />
 
                   {/* Quantity */}
-                  <div className="flex items-center gap-5 mt-5">
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-5 mt-5">
                     <input
                       type="number"
                       onChange={(e) => handleCountChange(e.target.value)}

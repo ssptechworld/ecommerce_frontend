@@ -6,6 +6,7 @@ import ProductCard from "@components/card/ProductCard";
 import Pagination from "@components/pagination/Pagination";
 import ErrorHandler from "@components/error-handler/ErrorHandler";
 import Spinner from "@components/spinner/Spinner";
+import EmptyState from "@components/empty-state/EmptyState";
 
 // --- Custom Hooks & Actions
 import { useAppDispatch, useAppSelector } from "@app/hooks";
@@ -116,35 +117,42 @@ const Products = ({
   return (
     <>
       {loading && (
-        <div className="flex items-center justify-center min-h-165 col-span-4">
+        <div className="flex items-center justify-center min-h-80 col-span-5 sm:col-span-3 lg:col-span-4">
           <Spinner />
         </div>
       )}
       {!loading && error && (
-        <div className="flex items-center justify-center col-span-4">
+        <div className="flex items-center justify-center col-span-5 sm:col-span-3 lg:col-span-4">
           <ErrorHandler error={error} />
         </div>
       )}
       {!loading && !error && (
-        <section className="lg:relative col-span-5 sm:col-span-3 lg:col-span-4">
-          <>
-            <div className="grid grid-cols-1 lg:grid-cols-2 xxl:grid-cols-3 gap-4 px-2.5">
-              {paginatedItems.map((product: ProductType) => (
-                <ProductCard key={product._id} product={{ ...product }} />
-              ))}
-            </div>
-            {pages > 1 && (
-              <Pagination
-                pages={pages}
-                page={page}
-                setPage={(newPage) => {
-                  const targetPage = typeof newPage === "function" ? newPage(page) : newPage;
-                  handlePageChange(targetPage);
-                }}
-                className="absolute -bottom-20 left-1/2 -translate-x-1/2"
-              />
-            )}
-          </>
+        <section className="relative col-span-5 sm:col-span-3 lg:col-span-4">
+          {paginatedItems.length === 0 ? (
+            <EmptyState
+              title="No products found"
+              desc="No products match the selected filter right now. Try choosing another category or check back soon."
+            />
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 px-1 sm:px-2.5 justify-items-center">
+                {paginatedItems.map((product: ProductType) => (
+                  <ProductCard key={product._id} product={{ ...product }} />
+                ))}
+              </div>
+              {pages > 1 && (
+                <Pagination
+                  pages={pages}
+                  page={page}
+                  setPage={(newPage) => {
+                    const targetPage = typeof newPage === "function" ? newPage(page) : newPage;
+                    handlePageChange(targetPage);
+                  }}
+                  className="mt-8 flex justify-center"
+                />
+              )}
+            </>
+          )}
         </section>
       )}
     </>

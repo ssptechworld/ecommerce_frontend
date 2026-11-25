@@ -16,16 +16,19 @@ const FooterExtra = () => {
             <h3 className="text-2xl font-bold mb-2">Sign up to our news & offers</h3>
             <p className="text-sm text-gray-600">Be the first to know about exclusive offers, new services, couriers, tools and more!</p>
           </div>
-          <div className="flex-1 w-full max-w-md flex">
-            <div className="relative flex-grow">
-              <input 
-                type="email" 
-                placeholder="email@address.com" 
-                className="w-full h-full py-3 px-4 pl-10 border-0 outline-none"
+          <div className="flex-1 w-full max-w-md flex rounded-md overflow-hidden shadow-xs">
+            <div className="relative flex-grow min-w-0 bg-white">
+              <input
+                type="email"
+                placeholder="email@address.com"
+                className="w-full h-full py-3 px-4 pl-10 border-0 outline-none text-sm"
               />
               <MdEmail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
             </div>
-            <button className="bg-[#12b981] hover:bg-emerald-600 text-white px-6 py-3 font-semibold flex items-center gap-2 transition-colors">
+            <button
+              type="button"
+              className="bg-[#12b981] hover:bg-emerald-600 text-white px-4 sm:px-6 py-3 font-semibold flex items-center gap-2 transition-colors shrink-0 whitespace-nowrap cursor-pointer"
+            >
               <FaPaperPlane className="hidden sm:block" /> Sign up
             </button>
           </div>

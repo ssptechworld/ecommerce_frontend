@@ -116,8 +116,8 @@ export default function InvoiceModal({ order, onClose }: InvoiceModalProps) {
           {/* Items Table */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Order Summary</h4>
-            <div className="border border-gray-200 rounded-xl overflow-hidden shadow-xs print:shadow-none">
-              <table className="w-full text-left border-collapse">
+            <div className="border border-gray-200 rounded-xl overflow-x-auto custom-scrollbar shadow-xs print:shadow-none">
+              <table className="w-full min-w-[460px] text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-100 text-gray-700 text-xs font-bold uppercase tracking-wider border-b border-gray-200">
                     <th className="p-3.5">#</th>

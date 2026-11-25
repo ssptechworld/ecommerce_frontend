@@ -72,21 +72,21 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarTypeProps) => {
       className={cn(
         "border-t border-t-[#d5d5d5]/25",
         isOpen
-          ? "max-md:absolute max-md:h-[calc(100vh-64px)] max-md:w-full max-md:bg-black/50 z-40 transition-all duration-300"
+          ? "max-md:fixed max-md:inset-0 max-md:top-[64px] max-md:bg-black/50 z-40 transition-all duration-300"
           : "",
       )}
     >
       <aside
         className={cn(
-          "relative w-[288px] shrink-0 p-10 bg-primary text-white flex flex-col z-50",
+          "relative w-[260px] sm:w-[288px] shrink-0 p-6 sm:p-10 bg-primary text-white flex flex-col z-50 overflow-y-auto custom-scrollbar",
           "transition-all duration-300 ease-in-out",
-          "max-md:absolute h-[calc(100vh-64px)] md:h-[calc(100vh-72px)]",
+          "max-md:absolute max-md:top-0 max-md:left-0 h-full",
           isOpen ? "max-md:translate-x-0" : "max-md:-translate-x-full",
-          isOpen ? "md:ml-0" : "md:-ml-72",
+          isOpen ? "md:ml-0" : "md:-ml-[260px] sm:md:-ml-[288px]",
         )}
       >
-        <nav>
-          <ul className="flex flex-col text-lg gap-2">
+        <nav className="flex-1">
+          <ul className="flex flex-col text-base sm:text-lg gap-2">
             <CustomNavLink to="/admin" end onClick={handleLinkClick}>
               <MdOutlineDashboard />
               Dashboard
@@ -121,7 +121,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarTypeProps) => {
 
         <CustomButton
           onClick={handleLogout}
-          className="absolute bottom-5 left-1/2 -translate-x-1/2 bg-red-500 text-white w-[80%] flex items-center gap-2.5 hover:bg-red-600 active:bg-red-500"
+          className="mt-6 bg-red-500 text-white w-full flex items-center justify-center gap-2.5 hover:bg-red-600 active:bg-red-500 shrink-0"
         >
           <FiLogOut /> Logout
         </CustomButton>

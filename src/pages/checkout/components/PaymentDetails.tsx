@@ -5,6 +5,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 // --- React Icons
 import { GiWrappingStar } from "react-icons/gi";
@@ -154,7 +155,11 @@ const PaymentDetails = () => {
         description: "E-Commerce Transaction",
         image: "/logo.svg",
         order_id: razorpayOrderId,
-        handler: async (response: any) => {
+        handler: async (response: {
+          razorpay_order_id: string;
+          razorpay_payment_id: string;
+          razorpay_signature: string;
+        }) => {
           const finalOrderData = {
             ...baseOrderData,
             paymentMethod: "card" as "card" | "cash",
@@ -190,13 +195,26 @@ const PaymentDetails = () => {
         },
       };
 
-      const rzp = new (window as any).Razorpay(options);
-      rzp.on("payment.failed", (response: any) => {
+      const RazorpayCtor = (
+        window as unknown as {
+          Razorpay: new (opts: Record<string, unknown>) => {
+            on: (event: string, cb: (res: { error: { description: string } }) => void) => void;
+            open: () => void;
+          };
+        }
+      ).Razorpay;
+      const rzp = new RazorpayCtor(options);
+      rzp.on("payment.failed", (response) => {
         alert("Payment failed: " + response.error.description);
       });
       rzp.open();
-    } catch (error: any) {
-      alert("Error starting payment flow: " + (error.response?.data?.message || error.message));
+    } catch (error: unknown) {
+      const msg = axios.isAxiosError(error)
+        ? error.response?.data?.message || error.message
+        : error instanceof Error
+          ? error.message
+          : "Unknown error";
+      alert("Error starting payment flow: " + msg);
     }
   };
 
@@ -228,7 +246,7 @@ const PaymentDetails = () => {
       <h2 className="relative w-fit text-primary/60 text-2xl font-jetbrains select-none mb-5 before:-bottom-1 before:absolute before:w-full before:h-0.5 before:bg-warning before:rounded-[100%]">
         CHECKOUT
       </h2>
-      <form className="max-sm:p-5 sm:px-10 sm:pb-10 rounded-lg mt-10" onSubmit={handleSubmit(onSubmit)}>
+      <form className="max-sm:p-3 sm:px-10 sm:pb-10 rounded-lg mt-6 sm:mt-10" onSubmit={handleSubmit(onSubmit)}>
         {/* 1. Address Section */}
         <h3 className="relative w-fit text-primary/60 text-lg font-jetbrains select-none mb-10 before:-bottom-1 before:absolute before:w-full before:h-0.5 before:bg-warning before:rounded-[100%]">
           1. Billing Address
@@ -284,7 +302,7 @@ const PaymentDetails = () => {
               onClick={handleUpdateProfile}
               isLoading={authLoading}
               type="button"
-              className="px-5 ml-auto mt-5"
+              className="px-5 w-full sm:w-auto sm:ml-auto mt-5"
             >
               Save Changes
             </CustomButton>
@@ -338,7 +356,11 @@ const PaymentDetails = () => {
           )}
 
           {!isAddressChanged && (
-            <CustomButton isLoading={loading || validatingAddress} type="submit" className="px-6 ml-auto mt-6">
+            <CustomButton
+              isLoading={loading || validatingAddress}
+              type="submit"
+              className="px-6 w-full sm:w-auto sm:ml-auto mt-6"
+            >
               {validatingAddress ? "Checking Address..." : payMethod === "card" ? "Pay & Place Order" : "Place Order (COD)"}
             </CustomButton>
           )}

@@ -36,7 +36,7 @@ const ProductImages = ({ images, title }: ProductImagesProps) => {
       </div>
       {/* --- Product Images */}
       {hasMultipleImages && (
-        <div className="flex gap-0.5 justify-center">
+        <div className="flex flex-wrap gap-1.5 justify-center">
           {images.map((img, index) => (
             <img
               src={getOptimizedImageUrl(img.url, 150)}

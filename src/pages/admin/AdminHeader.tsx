@@ -133,8 +133,8 @@ const AdminHeader = ({ isOpen, setIsOpen }: SidebarTypeProps) => {
                   `https://ui-avatars.com/api/?name=${user?.fullName}&background=0f172a&color=f87171`;
               }}
             />
-            <div className="text-white flex flex-col">
-              <span className="max-sm:text-[11px]">{user?.fullName}</span>
+            <div className="text-white flex flex-col min-w-0">
+              <span className="max-sm:text-[11px] truncate max-w-24 sm:max-w-40">{user?.fullName}</span>
               <span className="max-sm:text-[9px] text-[11px] text-[#d5d5d5]">@admin</span>
             </div>
 

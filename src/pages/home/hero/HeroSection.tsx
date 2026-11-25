@@ -9,12 +9,12 @@ const HeroSection = () => {
   return (
     <div className="mt-5">
       {/* Hero Section Offers */}
-      <section className="w-full grid grid-cols-10 gap-5 mb-10">
-        <div className="col-span-7">
+      <section className="w-full grid grid-cols-1 lg:grid-cols-10 gap-5 mb-10">
+        <div className="lg:col-span-7">
           <Offers />
         </div>
 
-        <div className="col-span-3">
+        <div className="lg:col-span-3">
           <Sellers />
         </div>
       </section>

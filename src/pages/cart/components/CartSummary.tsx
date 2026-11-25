@@ -52,7 +52,7 @@ const CartSummary = () => {
             type="button"
             aria-label="Checkout"
             onClick={handleCheckout}
-            className="w-fit h-13 px-5  mx-auto md:text-[14px] lg:text-[14px] xxl:text-[16px]"
+            className="w-full min-h-12 px-4 mx-auto text-sm xxl:text-base"
           >
             Checkout ({formatCurrency(total, "EGP")})
           </CustomButton>

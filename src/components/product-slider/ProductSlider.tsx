@@ -65,7 +65,7 @@ const ProductSlider = ({ productsCount, children }: ProductSliderProps) => {
   const totalGapsWidth = (productsCount - 1) * GAP + 60;
 
   // - Result (Available Scroll)
-  const availableScroll = totalProductsWidth + totalGapsWidth - containerWidth;
+  const availableScroll = Math.max(0, totalProductsWidth + totalGapsWidth - containerWidth);
 
   // --- Slider Logic
   const handlePrev = () => {

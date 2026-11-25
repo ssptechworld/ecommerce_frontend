@@ -47,7 +47,7 @@ const CustomerOrders = () => {
         />
       ) : (
         <div className="p-2.5 overflow-x-auto custom-scrollbar">
-          <table className="w-full border-collapse">
+          <table className="w-full min-w-max border-collapse">
             <thead>
               <tr className="bg-[#EFF2F3] text-neutral-700 *:whitespace-nowrap *:text-center *:text-[10px] *:px-3 *:py-2.5 *:flex-1 *:select-none *:not-last:border-r *:border-r-warning">
                 <th>IMAGE</th>
@@ -106,7 +106,7 @@ const CustomerOrders = () => {
                       {/* Expandable Detail Section */}
                       {isExpanded && (
                         <tr className="bg-neutral-50/40">
-                          <td colSpan={7} className="px-8 py-6 border-b border-neutral-200">
+                          <td colSpan={7} className="px-3 sm:px-8 py-4 sm:py-6 border-b border-neutral-200 whitespace-normal">
                             <div className="flex flex-col gap-6 text-left max-w-3xl mx-auto animate-in fade-in slide-in-from-top-2 duration-300">
                               
                               {/* 1. Item Details */}
@@ -116,7 +116,7 @@ const CustomerOrders = () => {
                                 </h4>
                                 <div className="space-y-2">
                                   {order.orderItems.map((item, index) => (
-                                    <div key={index} className="flex items-center justify-between text-xs py-2 border-b border-neutral-200/50 last:border-0">
+                                    <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs py-2 border-b border-neutral-200/50 last:border-0">
                                       <div className="flex items-center gap-3">
                                         <img src={item.image} alt={item.title} className="w-10 h-10 object-contain rounded bg-white p-1 border" />
                                         <div>

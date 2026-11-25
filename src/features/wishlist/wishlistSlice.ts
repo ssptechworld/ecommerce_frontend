@@ -46,23 +46,42 @@ const initialState: WishlistState = {
 
 // --- Async Thunks for DB persistence
 
+type WishlistApiItem = {
+  _id?: string;
+  productId?: string;
+  title: string;
+  image?: string;
+  price: number;
+  priceAfterDiscount?: number;
+  category?: ProductType["category"] | "";
+  rating?: number;
+  reviewsCount?: number;
+};
+
+const normalizeWishlistItem = (item: WishlistApiItem): ProductType =>
+  ({
+    _id: item.productId || item._id || "",
+    title: item.title,
+    images: [{ url: item.image || "", publicId: "" }],
+    price: item.price,
+    priceAfterDiscount: item.priceAfterDiscount || item.price,
+    category: (item.category || "electronics") as ProductType["category"],
+    rating: item.rating || 0,
+    reviewsCount: item.reviewsCount || 0,
+    discount: 0,
+    description: "",
+    createdAt: "",
+    updatedAt: "",
+  });
+
 /** Fetch wishlist from DB on login */
 export const fetchWishlistFromDB = createAsyncThunk<ProductType[], void, { rejectValue: string }>(
   "wishlist/fetchWishlistFromDB",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get("/wishlist");
+      const response = await api.get<WishlistApiItem[]>("/wishlist");
       // Normalize DB WishlistItem entity format to ProductType format if needed
-      return response.data.map((item: any) => ({
-        _id: item.productId || item._id,
-        title: item.title,
-        images: [{ url: item.image }],
-        price: item.price,
-        priceAfterDiscount: item.priceAfterDiscount || item.price,
-        category: item.category || "",
-        rating: item.rating || 0,
-        reviewsCount: item.reviewsCount || 0,
-      }));
+      return response.data.map(normalizeWishlistItem);
     } catch (error) {
       return rejectWithValue(errorMsg(error));
     }
@@ -119,17 +138,8 @@ export const mergeGuestWishlistDB = createAsyncThunk<ProductType[], ProductType[
         rating: item.rating,
         reviewsCount: item.reviewsCount,
       }));
-      const response = await api.post("/wishlist/merge", payload);
-      return response.data.map((item: any) => ({
-        _id: item.productId || item._id,
-        title: item.title,
-        images: [{ url: item.image }],
-        price: item.price,
-        priceAfterDiscount: item.priceAfterDiscount || item.price,
-        category: item.category || "",
-        rating: item.rating || 0,
-        reviewsCount: item.reviewsCount || 0,
-      }));
+      const response = await api.post<WishlistApiItem[]>("/wishlist/merge", payload);
+      return response.data.map(normalizeWishlistItem);
     } catch (error) {
       return rejectWithValue(errorMsg(error));
     }

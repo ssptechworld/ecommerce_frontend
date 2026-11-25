@@ -30,26 +30,25 @@ type HomeProductsSectionProps = React.ComponentProps<"section"> & {
 const HomeProductsSection = ({ excludeId, categoryKey, to, title, className, ...rest }: HomeProductsSectionProps) => {
   // --- Fetch Data
   const state = useAppSelector((state) => state.products);
-  const products = (state[categoryKey] || []) as ProductType[];
   const error = state.error;
 
   const loading = state.categoryLoading[categoryKey] ?? false;
   const isFetched = state.fetchedCategories[categoryKey] ?? false;
 
   // --- Lazy Loading State & Observer
-  const [hasBeenVisible, setHasBeenVisible] = useState(false);
+  const [becameVisible, setBecameVisible] = useState(false);
+  const hasBeenVisible = isFetched || becameVisible;
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isFetched) {
-      setHasBeenVisible(true);
+    if (hasBeenVisible) {
       return;
     }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setHasBeenVisible(true);
+          setBecameVisible(true);
           observer.disconnect();
         }
       },
@@ -61,7 +60,7 @@ const HomeProductsSection = ({ excludeId, categoryKey, to, title, className, ...
     }
 
     return () => observer.disconnect();
-  }, [isFetched]);
+  }, [hasBeenVisible]);
 
   // --- Dispatch
   const dispatch = useAppDispatch();
@@ -73,8 +72,9 @@ const HomeProductsSection = ({ excludeId, categoryKey, to, title, className, ...
 
   // --- Filtering Data
   const displayProducts = useMemo(() => {
-    return (products || []).filter((item: ProductType) => item._id !== excludeId);
-  }, [excludeId, products]);
+    const products = (state[categoryKey] || []) as ProductType[];
+    return products.filter((item: ProductType) => item._id !== excludeId);
+  }, [excludeId, state, categoryKey]);
 
   // --- Return JSX
   return (
@@ -96,9 +96,19 @@ const HomeProductsSection = ({ excludeId, categoryKey, to, title, className, ...
       {!loading && !error && displayProducts.length > 0 && (
         <ProductSlider productsCount={displayProducts.length}>
           {displayProducts.map((item: ProductType) => (
-            <ProductCard className="first-of-type:ml-3.75 last-of-type:mr-3.75" key={item._id} product={{ ...item }} />
+            <ProductCard
+              className="w-[270px] sm:w-[300px] shrink-0 first-of-type:ml-3.75 last-of-type:mr-3.75"
+              key={item._id}
+              product={{ ...item }}
+            />
           ))}
         </ProductSlider>
+      )}
+
+      {!loading && !error && isFetched && displayProducts.length === 0 && (
+        <div className="bg-white rounded-md p-6 text-center text-gray-500 text-sm shadow-soft">
+          No products available in this category yet.
+        </div>
       )}
     </section>
   );

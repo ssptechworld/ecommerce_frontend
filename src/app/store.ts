@@ -112,7 +112,9 @@ customMiddleware.startListening({
     let guestCart: CartType[] = [];
     try {
       guestCart = JSON.parse(window.localStorage.getItem("cart_guest") || "[]") as CartType[];
-    } catch {}
+    } catch {
+      guestCart = [];
+    }
 
     if (guestCart.length > 0) {
       listenerApi.dispatch(mergeGuestCartDB(guestCart));
@@ -125,7 +127,9 @@ customMiddleware.startListening({
     let guestWishlist: ProductType[] = [];
     try {
       guestWishlist = JSON.parse(window.localStorage.getItem("wishlist_guest") || "[]") as ProductType[];
-    } catch {}
+    } catch {
+      guestWishlist = [];
+    }
 
     if (guestWishlist.length > 0) {
       listenerApi.dispatch(mergeGuestWishlistDB(guestWishlist));

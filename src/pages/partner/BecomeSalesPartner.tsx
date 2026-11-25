@@ -7,6 +7,9 @@ import toast from "react-hot-toast";
 import { Check } from "lucide-react";
 import axios from "axios";
 
+// --- Utils
+import api from "@utils/api";
+
 // --- Components
 import InputField from "@components/inputs/InputField";
 import CustomButton from "@components/custom-button/CustomButton";
@@ -49,11 +52,11 @@ const BecomeSalesPartner = () => {
   const onSubmit: SubmitHandler<PartnerSchemaType> = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:5001/api/v1/partners", data);
+      const response = await api.post("/v1/partners", data);
       toast.success(response.data.message || "Application submitted successfully!");
       reset();
-    } catch (error: any) {
-      if (error.response && error.response.data && error.response.data.message) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
         toast.error(error.response.data.message);
       } else {
         toast.error("Failed to submit application. Please try again later.");

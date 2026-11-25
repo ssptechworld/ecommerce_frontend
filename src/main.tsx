@@ -6,7 +6,7 @@ import { Toaster } from "react-hot-toast";
 
 // --- Components
 import AppRouter from "@routes/AppRouter";
-import { AuthProvider } from "@/context/useAuth";
+import { AuthProvider } from "@/context/AuthContext";
 
 // --- Local Files
 import store from "@app/store";

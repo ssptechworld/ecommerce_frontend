@@ -60,11 +60,11 @@ const OrderDetailsModal = ({
     >
       <div className="bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="bg-primary text-white p-4 sm:p-5 flex items-center justify-between">
-          <div>
+        <div className="bg-primary text-white p-4 sm:p-5 flex items-center justify-between gap-3">
+          <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <FaBox className="text-warning text-lg" />
-              <h2 className="text-lg sm:text-xl font-bold font-jetbrains">Order #{order._id}</h2>
+              <FaBox className="text-warning text-lg shrink-0" />
+              <h2 className="text-base sm:text-xl font-bold font-jetbrains break-all">Order #{order._id}</h2>
             </div>
             <p className="text-xs text-gray-300 mt-1">Placed on {formatLocalDateOnly(order.createdAt)}</p>
           </div>
@@ -161,8 +161,8 @@ const OrderDetailsModal = ({
             <h3 className="font-bold text-primary text-sm sm:text-base font-jetbrains mb-3 flex items-center justify-between">
               <span>Ordered Products ({order.orderItems.length})</span>
             </h3>
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
-              <table className="w-full text-left border-collapse">
+            <div className="border border-gray-200 rounded-lg overflow-x-auto custom-scrollbar">
+              <table className="w-full min-w-[460px] text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-100 text-gray-600 text-[11px] uppercase tracking-wider border-b border-gray-200">
                     <th className="p-3">Product</th>

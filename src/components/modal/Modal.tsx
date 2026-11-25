@@ -48,9 +48,9 @@ const Modal = ({ title, description, setIsOpen, onConfirm }: ModalProps) => {
   return (
     <div
       onClick={(e) => handleClick(e)}
-      className="fixed inset-0 bg-black/35 backdrop-blur-[3px] flex items-center justify-center z-10000 select-none"
+      className="fixed inset-0 p-4 bg-black/35 backdrop-blur-[3px] flex items-center justify-center z-10000 select-none"
     >
-      <div className="bg-primary/85 w-[320px] sm:w-[384px] min-h-40 rounded-lg border border-gray-400/50 flex flex-col overflow-hidden">
+      <div className="bg-primary/85 w-full max-w-[384px] min-h-40 rounded-lg border border-gray-400/50 flex flex-col overflow-hidden">
         <div className="flex-1 p-2.5 text-white">
           <div className="max-sm:text-[16px] mb-2.5 text-lg font-semibold">{title || "Are you absolutely sure?"}</div>
           <div className="text-[12px] sm:text-sm text-gray-300">

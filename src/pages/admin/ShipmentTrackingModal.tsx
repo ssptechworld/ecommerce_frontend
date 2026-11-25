@@ -21,16 +21,22 @@ const CARRIER_PRESETS = [
 
 export default function ShipmentTrackingModal({ order, onClose }: ShipmentTrackingModalProps) {
   const [trackingUrl, setTrackingUrl] = useState("https://express.store.com/track");
-  const [trackingId, setTrackingId] = useState("");
+  const [trackingOverride, setTrackingOverride] = useState<{ orderId: string; value: string } | null>(null);
   const [copied, setCopied] = useState(false);
+
+  const defaultTrackingId = order ? order.trackingNumber || `TRK-${order._id.substring(0, 8).toUpperCase()}` : "";
+  const trackingId =
+    order && trackingOverride?.orderId === order._id ? trackingOverride.value : defaultTrackingId;
+
+  const setTrackingId = (value: string) => {
+    if (order) {
+      setTrackingOverride({ orderId: order._id, value });
+    }
+  };
 
   useEffect(() => {
     if (!order) return;
     document.body.style.overflow = "hidden";
-    
-    // Default tracking ID if order has one or generate from order ID
-    const defaultId = order.trackingNumber || `TRK-${order._id.substring(0, 8).toUpperCase()}`;
-    setTrackingId(defaultId);
 
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();

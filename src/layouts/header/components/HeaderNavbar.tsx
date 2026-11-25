@@ -19,10 +19,10 @@ const Navbar = ({ toggleBurger, handleNavBarClose, handleClose }: NavbarProps) =
   return (
     <nav
       className={cn(
-        "max-lg:absolute max-lg:top-0 max-lg:left-0 max-lg:flex-col max-lg:items-start max-lg:bg-black/40 max-lg:h-dvh max-lg:w-full duration-500 transition-[clip-path] ease-in-out z-50",
+        "max-lg:fixed max-lg:inset-0 max-lg:flex-col max-lg:items-start max-lg:bg-black/40 max-lg:h-dvh max-lg:w-full duration-500 transition-[clip-path] ease-in-out z-50",
         toggleBurger
           ? "max-lg:[clip-path:polygon(0_0,100%_0,100%_100%,0_100%)]"
-          : "max-lg:[clip-path:polygon(0_0,0_0,0_100%,0_100%)]",
+          : "max-lg:[clip-path:polygon(0_0,0_0,0_100%,0_100%)] pointer-events-none lg:pointer-events-auto",
       )}
       onClick={(e) => handleNavBarClose(e)}
     >
@@ -34,7 +34,7 @@ const Navbar = ({ toggleBurger, handleNavBarClose, handleClose }: NavbarProps) =
       >
         <RiCloseLargeLine />
       </button>
-      <ul className="flex items-center mx-auto max-lg:absolute max-lg:top-0 max-lg:left-0 max-lg:flex-col max-lg:items-start max-lg:bg-primary max-lg:h-dvh w-[80%] md:w-[50%] lg:w-fit">
+      <ul className="flex items-center mx-auto max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:flex-col max-lg:items-start max-lg:bg-primary max-lg:h-dvh max-lg:overflow-y-auto w-[80%] max-w-xs md:w-[50%] lg:w-fit lg:max-w-none">
         <li className="header-navbar-list-item max-lg:w-full lg:h-full select-none">
           <CustomLink
             to="/"

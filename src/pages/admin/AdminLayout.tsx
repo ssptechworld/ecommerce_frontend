@@ -27,12 +27,12 @@ const AdminLayout = () => {
     <div className="bg-primary h-dvh overflow-hidden flex flex-col">
       <AdminHeader isOpen={isOpen} setIsOpen={setIsOpen} />
 
-      <div className={cn("h-[calc(100%-76px)] sm:h-[calc(100%-84px)] flex relative")}>
+      <div className={cn("flex-1 flex relative overflow-hidden")}>
         <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
 
         <main
           className={cn(
-            "p-5 h-[calc(100vh-64px)] md:h-[calc(100vh-72px)] overflow-auto custom-scrollbar bg-[#F7F7F7] flex-1",
+            "p-3 sm:p-5 h-full min-w-0 overflow-auto custom-scrollbar bg-[#F7F7F7] flex-1",
           )}
         >
           <Suspense

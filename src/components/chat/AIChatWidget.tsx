@@ -163,10 +163,10 @@ export default function AiChatWidget() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end font-sans">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end font-sans">
       {/* Expanded Chat Box */}
       {isOpen && (
-        <div className="mb-4 flex h-[420px] w-[260px] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl transition-all sm:w-[400px]">
+        <div className="mb-4 flex h-[min(460px,calc(100dvh-6.5rem))] w-[calc(100vw-2rem)] max-w-[400px] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl transition-all">
           {/* Header */}
           <div className="flex items-center justify-between bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 p-4 text-white shadow-md">
             <div className="flex items-center gap-3">
@@ -272,7 +272,7 @@ export default function AiChatWidget() {
               value={inputMsg}
               onChange={(e) => setInputMsg(e.target.value)}
               placeholder={limitReached ? "Limit reached. Refresh to chat." : "Ask AI assistant..."}
-              className="flex-1 rounded-xl border border-gray-200 px-3.5 py-2 text-sm focus:border-amber-500 focus:outline-none disabled:bg-gray-100 disabled:opacity-75"
+              className="flex-1 min-w-0 rounded-xl border border-gray-200 px-3.5 py-2 text-sm focus:border-amber-500 focus:outline-none disabled:bg-gray-100 disabled:opacity-75"
               disabled={loading || limitReached}
             />
             <button

@@ -20,7 +20,29 @@ import { addProduct, fetchSingleProduct, updateProduct } from "@features/product
 import { ALL_CATEGORIES } from "@data/productCategories";
 
 // --- Types
-import type { CategoriesType, ProductImageType } from "@/types/types";
+import type { CategoriesType, ProductImageType, ProductType } from "@/types/types";
+
+type ExtendedProductType = ProductType & {
+  subCategory?: string;
+  productType?: string;
+  brand?: string;
+  productWeight?: string;
+  productDimensions?: string;
+  totalPackedWeight?: string;
+  totalPackageDimensions?: string;
+  deliveryTime?: string;
+  specialCareDescription?: string;
+  returnEligible?: boolean;
+  returnWindow?: number;
+  returnType?: string;
+  returnShippingCost?: string;
+  returnInstructions?: string;
+  warrantyAvailable?: boolean;
+  warrantyPeriod?: string;
+  warrantyProvide?: string;
+  warrantyTerms?: string;
+  productSpecificationSheetUrl?: string;
+};
 
 // --- Product Schema
 const ProductSchema = z.object({
@@ -45,14 +67,14 @@ const ProductSchema = z.object({
   specialCareDescription: z.string().optional(),
 
   // Return Policy
-  returnEligible: z.boolean().default(false),
+  returnEligible: z.boolean(),
   returnWindow: z.string().optional(),
   returnType: z.string().optional(),
   returnShippingCost: z.string().optional(),
   returnInstructions: z.string().optional(),
 
   // Warranty Policy
-  warrantyAvailable: z.boolean().default(false),
+  warrantyAvailable: z.boolean(),
   warrantyPeriod: z.string().optional(),
   warrantyProvide: z.string().optional(),
   warrantyTerms: z.string().optional(),
@@ -79,11 +101,11 @@ const AddProduct = () => {
     formState: { errors },
   } = useForm<ProductSchemaType>({
     mode: "onBlur",
-    resolver: zodResolver(ProductSchema) as any,
+    resolver: zodResolver(ProductSchema),
     defaultValues: {
       returnEligible: false,
       warrantyAvailable: false,
-    }
+    },
   });
 
   const isReturnEligible = watch("returnEligible");
@@ -99,7 +121,10 @@ const AddProduct = () => {
       ? state.products[category as CategoriesType].find((p) => p._id === id)
       : undefined,
   );
-  const product: any = productFromAdmin ?? productFromCat ?? (productFromSingle?._id === id ? productFromSingle : undefined) ?? undefined;
+  const product: ExtendedProductType | undefined =
+    (productFromAdmin ?? productFromCat ?? (productFromSingle?._id === id ? productFromSingle : undefined) ?? undefined) as
+      | ExtendedProductType
+      | undefined;
 
   useEffect(() => {
     if (id && !product) {
@@ -198,8 +223,7 @@ const AddProduct = () => {
       const formData = new FormData();
       
       // Append all string fields
-      Object.keys(data).forEach((key) => {
-        const value = (data as any)[key];
+      (Object.entries(data) as [keyof ProductSchemaType, unknown][]).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== "") {
           formData.append(key, String(value));
         }
@@ -234,16 +258,16 @@ const AddProduct = () => {
   // --- Return JSX
   return (
     <div className="flex flex-col h-full gap-5">
-      <div className="bg-white p-5 rounded-md shadow-sm flex justify-between items-center">
-        <h1 className="text-xl font-bold text-primary font-jetbrains">
+      <div className="bg-white p-4 sm:p-5 rounded-md shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <h1 className="text-lg sm:text-xl font-bold text-primary font-jetbrains break-words">
           {product ? `Edit Product: "${product.title}"` : "Add New Product"}
         </h1>
-        <CustomButton type="button" className="text-sm px-4 py-2" onClick={() => navigate("/admin/products")}>
+        <CustomButton type="button" className="text-sm px-4 py-2 shrink-0" onClick={() => navigate("/admin/products")}>
           Back to List
         </CustomButton>
       </div>
 
-      <div className="bg-white rounded-md shadow-sm p-6 flex-1">
+      <div className="bg-white rounded-md shadow-sm p-4 sm:p-6 flex-1">
         {id && !product ? (
           <div className="h-64 flex items-center justify-center">
             <ErrorHandler error={"Product Not Found"} />
@@ -427,7 +451,7 @@ const AddProduct = () => {
             </div>
 
             {/* Submit Button */}
-            <div className="flex justify-end gap-3 mt-4">
+            <div className="flex flex-wrap justify-end gap-3 mt-4">
               <CustomButton type="button" className="bg-gray-200 text-gray-700 hover:bg-gray-300 px-6 py-3 rounded-md text-sm font-semibold" onClick={() => navigate("/admin/products")}>
                 Cancel
               </CustomButton>

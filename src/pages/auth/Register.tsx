@@ -107,15 +107,15 @@ const Register = () => {
         <p className="max-sm:text-[12px] text-[14px] font-light">Sign up to start your shopping journey</p>
       </h1>
 
-      <div className="bg-white rounded-xl">
+      <div className="bg-white rounded-xl w-full max-w-md">
         <h2 className="text-2xl w-fit mx-auto text-primary mt-5 mb-2.5 font-jetbrains">Register</h2>
         {serverError && (
-          <div className="mb-4 text-sm text-red-600 bg-red-50 border border-red-200 p-2.5 rounded-md text-center max-w-88 mx-auto">
+          <div className="mb-4 mx-5 sm:mx-10 text-sm text-red-600 bg-red-50 border border-red-200 p-2.5 rounded-md text-center">
             {serverError}
           </div>
         )}
         <form
-          className="shadow-lg flex flex-col gap-5 max-sm:p-5 sm:px-10 sm:pb-10 rounded-lg min-w-80 sm:min-w-88"
+          className="shadow-lg flex flex-col gap-5 max-sm:p-5 sm:px-10 sm:pb-10 rounded-lg w-full"
           onSubmit={handleSubmit(onSubmit)}
         >
           <InputField

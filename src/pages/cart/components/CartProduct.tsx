@@ -44,13 +44,13 @@ const CartProduct = (product: CartType) => {
 
   //--- Return JSX
   return (
-    <div className="relative flex justify-between border-b-2 border-b-body last:border-b-0 w-[97.5%] mx-auto p-3">
+    <div className="relative flex flex-col sm:flex-row justify-between gap-4 border-b-2 border-b-body last:border-b-0 w-[97.5%] mx-auto p-3">
       {/* Cart Product Left */}
-      <div className="flex flex-col gap-5 w-3/4 max-xl:w-3/5">
+      <div className="flex flex-col gap-3 sm:gap-5 w-full sm:w-3/5 xl:w-3/4 min-w-0">
         {/* ---- Cart Left Details */}
         <Link to={`/products/${product.category}/${product.productId}`}>
           <div className="flex items-center gap-2.5">
-            <div className="w-18 h-18">
+            <div className="w-16 h-16 sm:w-18 sm:h-18 shrink-0">
               <img
                 src={product.image}
                 alt={product.title}
@@ -62,8 +62,8 @@ const CartProduct = (product: CartType) => {
                 }}
               />
             </div>
-            <div>
-              <h4 className="font-light line-clamp-1">{product.title}</h4>
+            <div className="min-w-0">
+              <h4 className="font-light line-clamp-2">{product.title}</h4>
             </div>
           </div>
         </Link>
@@ -79,13 +79,13 @@ const CartProduct = (product: CartType) => {
         </button>
       </div>
       {/* Cart Product Right */}
-      <div className="flex flex-col items-end gap-5 max-lg:mt-2.5 w-1/4 max-xl:w-2/5">
+      <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-3 sm:gap-5 w-full sm:w-2/5 xl:w-1/4 shrink-0">
         {/* --- Price */}
-        <div className="flex flex-col items-end gap-1.5">
-          <div className="text-[16px] sm:text-lg">{formatCurrency(product.price)}</div>
+        <div className="flex flex-col sm:items-end gap-1.5">
+          <div className="text-[16px] sm:text-lg font-medium">{formatCurrency(product.price)}</div>
         </div>
         {/* --- Controllers */}
-        <div className="flex items-center gap-3.5">
+        <div className="flex items-center gap-2.5 sm:gap-3.5">
           <button
             type="button"
             aria-label="Decrease Quantity by 1"
@@ -94,7 +94,7 @@ const CartProduct = (product: CartType) => {
           >
             <HiMinus className="max-sm:text-[12px]" />
           </button>
-          <span className="text-lg font-medium w-15 text-center border">{product.count}</span>
+          <span className="text-base sm:text-lg font-medium w-10 sm:w-15 text-center border">{product.count}</span>
           <button
             type="button"
             aria-label="Increase Quantity by 1"

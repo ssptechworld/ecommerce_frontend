@@ -24,12 +24,12 @@ const CustomTitle = ({ to, title, offer = false, className, ...rest }: CustomTit
     <div
       className={cn(
         offer ? "bg-offer text-white" : "bg-warning text-primary",
-        "px-5 py-2.5 max-sm:text-xl text-2xl max-sm:text-center rounded-md flex items-center justify-between max-sm:gap-1  max-lg:flex-col",
+        "px-4 sm:px-5 py-2.5 max-sm:text-lg text-2xl max-lg:text-center rounded-md flex items-center justify-between gap-2 max-lg:flex-col",
         className,
       )}
       {...rest}
     >
-      <h2 className="flex items-center gap-1.5 font-bold">
+      <h2 className="flex items-center justify-center gap-1.5 font-bold">
         {offer && <MdLocalOffer className="text-yellow-300 max-sm:hidden" />}
         {title}
       </h2>

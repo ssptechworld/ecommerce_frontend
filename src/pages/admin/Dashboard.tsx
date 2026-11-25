@@ -49,15 +49,15 @@ const CustomStatsCard = ({
     <div
       style={{ background: `linear-gradient(to right, ${color}, ${color}80)` }}
       className={cn(
-        `relative col-span-4 lg:col-span-2 xxl:col-span-1 px-10 xxl:px-7 py-7.5 h-25 rounded-md flex items-center justify-start gap-10 shadow-lg`,
+        `relative px-5 sm:px-7 py-5 min-h-24 rounded-md flex items-center justify-start gap-4 sm:gap-6 shadow-lg min-w-0`,
         className,
       )}
       {...rest}
     >
-      <div className="text-white/50">{firstIcon}</div>
-      <div className="mx-auto flex flex-col items-center justify-center w-50 font-jetbrains">
-        <span className="text-white/75 tracking-wider font-bold">{title}</span>
-        <span className="text-[22px] xxl:text-[20px] font-semibold flex items-center justify-center">
+      <div className="text-white/50 shrink-0">{firstIcon}</div>
+      <div className="flex-1 min-w-0 flex flex-col items-center justify-center font-jetbrains text-center">
+        <span className="text-white/75 tracking-wider font-bold text-sm sm:text-base truncate max-w-full">{title}</span>
+        <span className="text-xl sm:text-[22px] xxl:text-[20px] font-semibold flex items-center justify-center">
           {price ? formatCurrency(stats) : stats.toLocaleString()}
         </span>
       </div>
@@ -96,7 +96,7 @@ const Dashboard = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-4 gap-5 xxl:gap-2.5 text-white">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xxl:grid-cols-4 gap-4 xxl:gap-2.5 text-white">
         <CustomStatsCard
           firstIcon={<FaDollarSign size={30} />}
           secondIcon={<SiSoundcharts size={30} />}
@@ -146,43 +146,51 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {orders.slice(0, 7).map((order) => (
-                <tr
-                  key={order._id}
-                  className="even:bg-[#EFF2F3]/75 hover:bg-gray-500/10 transition-colors *:px-3 *:py-2.5 *:text-center *:text-[12px]"
-                >
-                  <td onClick={() => setSelectedOrder(order)} className="cursor-pointer">
-                    <OrderImages orderItems={order.orderItems} />
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedOrder(order)}
-                      title={`View details for order ${order._id}`}
-                      className="font-mono uppercase text-[10px] text-blue-600 hover:text-blue-800 underline font-semibold cursor-pointer"
-                    >
-                      {order._id.substring(0, 8)}...
-                    </button>
-                  </td>
-                  <td>{formatLocalDateOnly(order.createdAt)}</td>
-                  <td className="max-w-40 truncate" title={order.shippingAddress.street}>
-                    {`${order.shippingAddress.city}, ${order.shippingAddress.area}`}
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedOrder(order)}
-                      className="font-bold text-blue-600 hover:underline cursor-pointer"
-                    >
-                      {order.orderItems.length}
-                    </button>
-                  </td>
-                  <td>{formatCurrency(order.totalPrice)}</td>
-                  <td>
-                    <SelectStatus id={order._id} status={order.status} />
+              {orders.length > 0 ? (
+                orders.slice(0, 7).map((order) => (
+                  <tr
+                    key={order._id}
+                    className="even:bg-[#EFF2F3]/75 hover:bg-gray-500/10 transition-colors *:px-3 *:py-2.5 *:text-center *:text-[12px]"
+                  >
+                    <td onClick={() => setSelectedOrder(order)} className="cursor-pointer">
+                      <OrderImages orderItems={order.orderItems} />
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedOrder(order)}
+                        title={`View details for order ${order._id}`}
+                        className="font-mono uppercase text-[10px] text-blue-600 hover:text-blue-800 underline font-semibold cursor-pointer"
+                      >
+                        {order._id.substring(0, 8)}...
+                      </button>
+                    </td>
+                    <td>{formatLocalDateOnly(order.createdAt)}</td>
+                    <td className="max-w-40 truncate" title={order.shippingAddress.street}>
+                      {`${order.shippingAddress.city}, ${order.shippingAddress.area}`}
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedOrder(order)}
+                        className="font-bold text-blue-600 hover:underline cursor-pointer"
+                      >
+                        {order.orderItems.length}
+                      </button>
+                    </td>
+                    <td>{formatCurrency(order.totalPrice)}</td>
+                    <td>
+                      <SelectStatus id={order._id} status={order.status} />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={7} className="py-10 text-center text-gray-500 font-jetbrains text-sm">
+                    No recent orders yet.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

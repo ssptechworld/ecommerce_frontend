@@ -24,14 +24,14 @@ const Pagination = ({ pages, page, setPage, className, ...props }: PaginationPro
 
   // --- Styles
   const baseStyle =
-    "flex items-center justify-center font-bold max-sm:w-11 w-20 h-10 text-warning border-r cursor-pointer select-none hover:bg-primary active:bg-primary/95";
+    "flex items-center justify-center font-bold min-w-9 sm:w-14 h-10 px-2 text-warning border-r cursor-pointer select-none hover:bg-primary active:bg-primary/95";
   const btnStyle =
-    "bg-primary border-r-0 disabled:opacity-50 disabled:cursor-no-drop disabled:active:bg-primary text-3xl";
+    "bg-primary border-r-0 disabled:opacity-50 disabled:cursor-no-drop disabled:active:bg-primary text-2xl sm:text-3xl";
 
   // --- Return JSX
   return (
-    <section {...props} className={cn("pagination", className)}>
-      <div className="flex items-center w-fit mx-auto">
+    <section {...props} className={cn("pagination max-w-full", className)}>
+      <div className="flex flex-wrap items-center justify-center w-fit max-w-full mx-auto rounded-md overflow-hidden">
         {/* Previous Button */}
         <button
           type="button"
@@ -44,7 +44,7 @@ const Pagination = ({ pages, page, setPage, className, ...props }: PaginationPro
         </button>
 
         {/* Pagination Pages */}
-        <div className="flex items-center">
+        <div className="flex flex-wrap items-center justify-center">
           {Array(pages)
             .fill(0)
             .map((_, index) => (

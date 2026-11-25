@@ -60,10 +60,10 @@ const ResetPassword = () => {
         </p>
       </h1>
 
-      <div className="bg-white rounded-xl">
+      <div className="bg-white rounded-xl w-full max-w-md">
         <h2 className="text-2xl w-fit mx-auto text-primary mt-5 mb-2.5 font-jetbrains">Reset Request</h2>
         <form
-          className="shadow-lg flex flex-col gap-4 max-sm:p-5 sm:px-10 sm:pb-10 rounded-lg min-w-80 sm:min-w-88"
+          className="shadow-lg flex flex-col gap-4 max-sm:p-5 sm:px-10 sm:pb-10 rounded-lg w-full"
           onSubmit={handleSubmit(onSubmit)}
         >
           <InputField

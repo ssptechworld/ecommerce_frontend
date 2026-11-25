@@ -31,19 +31,19 @@ const SpecialOffers = ({ excludeId, className, ...rest }: SpecialOffersProps) =>
   const isFetched = state.fetchedCategories["specialOffers"] ?? false;
 
   // --- Lazy Loading State & Observer
-  const [hasBeenVisible, setHasBeenVisible] = useState(false);
+  const [becameVisible, setBecameVisible] = useState(false);
+  const hasBeenVisible = isFetched || becameVisible;
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isFetched) {
-      setHasBeenVisible(true);
+    if (hasBeenVisible) {
       return;
     }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setHasBeenVisible(true);
+          setBecameVisible(true);
           observer.disconnect();
         }
       },
@@ -55,7 +55,7 @@ const SpecialOffers = ({ excludeId, className, ...rest }: SpecialOffersProps) =>
     }
 
     return () => observer.disconnect();
-  }, [isFetched]);
+  }, [hasBeenVisible]);
 
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -85,7 +85,7 @@ const SpecialOffers = ({ excludeId, className, ...rest }: SpecialOffersProps) =>
         </div>
       )}
 
-      {!loading && !error && (
+      {!loading && !error && displayProducts.length > 0 && (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
           {displayProducts.map((specialOffer: ProductType) => (
             <SpecialOfferCard
@@ -94,6 +94,12 @@ const SpecialOffers = ({ excludeId, className, ...rest }: SpecialOffersProps) =>
               isOdd={displayProducts.length % 2 !== 0}
             />
           ))}
+        </div>
+      )}
+
+      {!loading && !error && isFetched && displayProducts.length === 0 && (
+        <div className="bg-white rounded-md p-8 text-center text-gray-500 text-sm shadow-soft">
+          No special offers available right now. Check back soon!
         </div>
       )}
     </div>

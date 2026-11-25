@@ -9,7 +9,7 @@ const Category = () => {
   // --- Return JSX
   return (
     <section>
-      <h2 className="w-fit mx-auto mb-7 bg-warning py-1.5 px-5 rounded-sm text-sm sm:text-lg md:text-xl lg:text-2xl font-bold lg:font-medium font-jetbrains">
+      <h2 className="w-fit max-w-full mx-auto mb-7 bg-warning py-1.5 px-5 rounded-sm text-sm sm:text-lg md:text-xl lg:text-2xl font-bold lg:font-medium font-jetbrains text-center">
         All Your Essentials in One Place
       </h2>
       <ul className="grid grid-cols-2 gap-2.5 xl:gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
@@ -23,7 +23,7 @@ const Category = () => {
                 width="150"
                 height="150"
                 draggable="false"
-                className="max-md:w-35 lg:w-40"
+                className="w-28 sm:w-36 lg:w-40 aspect-square object-contain"
               />
               <span className="text-[13px] sm:text-[14px] font-medium sm:font-normal">{category.title}</span>
             </div>

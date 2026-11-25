@@ -45,14 +45,14 @@ const OrderSummary = () => {
         </div>
 
         {/* Calculations Section */}
-        <div className="pl-5 py-5 flex flex-col gap-2.5">
-          <div className="flex items-center">
+        <div className="px-2 sm:pl-5 py-5 flex flex-col gap-2.5">
+          <div className="flex items-center justify-between sm:justify-start">
             <span className="font-semibold mr-2.5 w-30 bg-neutral-400/15 p-1.5 rounded-sm text-xs sm:text-sm">
               Sub Total
             </span>
             <span className="font-jetbrains">{formatCurrency(total)}</span>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center justify-between sm:justify-start">
             <span className="font-semibold mr-2.5 w-30 bg-neutral-400/15 p-1.5 rounded-sm text-xs sm:text-sm">
               Delivery Fee
             </span>
@@ -61,7 +61,7 @@ const OrderSummary = () => {
         </div>
 
         {/* Grand Total */}
-        <div className="pl-5 py-5 flex items-center">
+        <div className="px-2 sm:pl-5 py-5 flex items-center justify-between sm:justify-start">
           <span className="font-bold mr-2.5 w-30 bg-warning/20 p-1.5 rounded-sm text-primary">TOTAL</span>
           <span className="font-bold text-xl text-primary font-jetbrains">{formatCurrency(totalPrice)}</span>
         </div>

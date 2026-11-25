@@ -30,36 +30,36 @@ const ProfileLayout = () => {
   return (
     <div className="grid grid-cols-4 gap-5 my-5">
       {/* Left Side */}
-      <div className="col-span-4 h-fit md:col-span-1 bg-white rounded-md overflow-hidden shadow-soft max-md:flex max-md:justify-center max-md:items-center md:gap-2.5">
-        <ul className="md:border-b border-[#D4D4D6] max-lg:text-[12px] max-md:flex flex-2">
-          <li className="flex-2">
+      <div className="col-span-4 h-fit md:col-span-1 bg-white rounded-md overflow-hidden shadow-soft flex flex-col sm:flex-row md:flex-col md:gap-2.5">
+        <ul className="md:border-b border-[#D4D4D6] max-lg:text-[12px] flex flex-wrap sm:flex-nowrap md:flex-col flex-1 overflow-x-auto">
+          <li className="shrink-0">
             <NavLink
               to="/profile"
               end
               className={({ isActive }) =>
-                cn("flex items-center gap-2.5 p-2.5", isActive ? "bg-[#D4D4D6]" : "bg-white hover:bg-body")
+                cn("flex items-center gap-2.5 p-2.5 whitespace-nowrap", isActive ? "bg-[#D4D4D6]" : "bg-white hover:bg-body")
               }
             >
               <FaRegUser />
               My Account Overview
             </NavLink>
           </li>
-          <li className="flex-1">
+          <li className="shrink-0">
             <NavLink
               to="orders"
               className={({ isActive }) =>
-                cn("flex items-center gap-2.5 p-2.5", isActive ? "bg-[#D4D4D6]" : "bg-white hover:bg-body")
+                cn("flex items-center gap-2.5 p-2.5 whitespace-nowrap", isActive ? "bg-[#D4D4D6]" : "bg-white hover:bg-body")
               }
             >
               <BsBox2 />
               Orders
             </NavLink>
           </li>
-          <li className="flex-1">
+          <li className="shrink-0">
             <NavLink
               to="saved"
               className={({ isActive }) =>
-                cn("flex items-center gap-2.5 p-2.5", isActive ? "bg-[#D4D4D6]" : "bg-white hover:bg-body")
+                cn("flex items-center gap-2.5 p-2.5 whitespace-nowrap", isActive ? "bg-[#D4D4D6]" : "bg-white hover:bg-body")
               }
             >
               <FaHeart className="text-red-400" />
@@ -69,7 +69,7 @@ const ProfileLayout = () => {
         </ul>
         <CustomButton
           onClick={handleLogout}
-          className="max-md:h-9.5 rounded-none px-2.5 max-lg:text-[14px] max-md:active:scale-[1] md:rounded-md md:my-5 md:w-7/10 md:mx-auto"
+          className="max-md:h-9.5 rounded-none px-4 max-lg:text-[14px] max-md:active:scale-[1] md:rounded-md md:my-5 md:w-7/10 md:mx-auto shrink-0"
         >
           Logout
         </CustomButton>

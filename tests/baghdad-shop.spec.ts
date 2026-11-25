@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 
 /**
  * BAGHDAD SHOP — Playwright E2E Tests
@@ -16,7 +16,7 @@ const CUSTOMER_PASSWORD = "Baghdad@2026";
 
 // ── Helper ──────────────────────────────────────────────────────────────────
 
-async function loginAsCustomer(page: any) {
+async function loginAsCustomer(page: Page) {
   await page.goto(`${BASE_URL}/login`);
   await page.fill('input[type="email"]', CUSTOMER_EMAIL);
   await page.fill('input[type="password"]', CUSTOMER_PASSWORD);

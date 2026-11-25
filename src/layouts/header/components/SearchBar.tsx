@@ -86,13 +86,13 @@ const SearchBar = () => {
       >
         <button
           aria-label="Submit search"
-          className="bg-warning text-primary h-full cursor-pointer px-5 font-medium text-lg select-none hover:bg-amber-500 active:bg-amber-400 duration-300 transition-colors flex items-center justify-center gap-1.5"
+          className="bg-warning text-primary h-full cursor-pointer px-3 sm:px-5 font-medium text-lg select-none hover:bg-amber-500 active:bg-amber-400 duration-300 transition-colors flex items-center justify-center gap-1.5 shrink-0"
           type="submit"
         >
           <FiSearch className="text-xl" />
           <span className="hidden sm:inline">Search</span>
         </button>
-        <div className="relative flex-1 h-full flex items-center">
+        <div className="relative flex-1 min-w-0 h-full flex items-center">
           <input
             className="w-full h-full px-3 caret-warning outline-0 select-none bg-white overflow-hidden whitespace-nowrap text-ellipsis text-primary text-base font-sans placeholder:text-gray-400 pr-9"
             type="search"

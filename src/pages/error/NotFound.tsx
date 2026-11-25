@@ -5,8 +5,8 @@ import { Link } from "react-router";
 const NotFound = () => {
   return (
     <div className="container m-auto flex flex-col justify-center items-center text-center grow">
-      <h1 className="text-[150px] md:text-[200px] text-black font-bold">404</h1>
-      <p className="text-4xl sm:text-5xl mb-7">Page Not Found</p>
+      <h1 className="text-[100px] sm:text-[150px] md:text-[200px] text-black font-bold leading-none">404</h1>
+      <p className="text-2xl sm:text-4xl md:text-5xl mb-7 mt-2">Page Not Found</p>
       <Link
         to="/"
         aria-label="Go to Home Page"

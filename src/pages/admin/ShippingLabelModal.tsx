@@ -77,7 +77,7 @@ export default function ShippingLabelModal({ order, onClose }: ShippingLabelModa
         <div className="p-6 overflow-y-auto flex-1 custom-scrollbar print:p-0 print:overflow-visible">
           <div className="border-4 border-gray-900 rounded-lg p-5 bg-white text-gray-900 font-sans space-y-4 print:border-4 print:border-black max-w-lg mx-auto">
             {/* Header: Carrier & Order ID */}
-            <div className="flex justify-between items-center border-b-2 border-gray-900 pb-3">
+            <div className="flex flex-wrap justify-between items-center gap-2 border-b-2 border-gray-900 pb-3">
               <div>
                 <h3 className="font-extrabold text-2xl tracking-tighter uppercase">{STORE_CONFIG.shortName} EXPRESS</h3>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-gray-600">Standard Parcel Delivery Service</p>
@@ -100,9 +100,9 @@ export default function ShippingLabelModal({ order, onClose }: ShippingLabelModa
             </div>
 
             {/* FROM and TO Grid */}
-            <div className="grid grid-cols-2 gap-4 border-t-2 border-b-2 border-gray-900 py-3 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 print:grid-cols-2 gap-4 border-t-2 border-b-2 border-gray-900 py-3 text-xs">
               {/* FROM */}
-              <div className="border-r border-gray-400 pr-3">
+              <div className="border-b sm:border-b-0 sm:border-r print:border-b-0 print:border-r border-gray-400 pb-3 sm:pb-0 sm:pr-3">
                 <span className="font-bold uppercase tracking-wider text-[10px] text-gray-500 block mb-1">SHIP FROM:</span>
                 <p className="font-bold text-gray-900">{STORE_CONFIG.name}</p>
                 <p className="text-gray-700">{STORE_CONFIG.address.street}</p>

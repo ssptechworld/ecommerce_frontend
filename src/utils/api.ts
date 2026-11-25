@@ -1,7 +1,23 @@
 import axios from "axios";
 
+const DEFAULT_DEV_API_URL = "http://localhost:5001/api";
+const DEFAULT_PROD_API_URL = "https://ecommerce-backend-y2b5.onrender.com/api";
+
+const rawApiUrl = import.meta.env.VITE_API_URL?.trim();
+const trimmedApiUrl = rawApiUrl ? rawApiUrl.replace(/\/+$/, "") : "";
+
+export const API_BASE_URL = trimmedApiUrl
+  ? trimmedApiUrl.endsWith("/api")
+    ? trimmedApiUrl
+    : `${trimmedApiUrl}/api`
+  : import.meta.env.PROD
+    ? DEFAULT_PROD_API_URL
+    : DEFAULT_DEV_API_URL;
+
+export const BACKEND_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5001/api",
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -33,7 +49,7 @@ api.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

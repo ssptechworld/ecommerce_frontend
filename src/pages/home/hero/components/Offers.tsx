@@ -28,7 +28,7 @@ const Offers = () => {
 
   // --- Return JSX
   return (
-    <div className="w-full h-full rounded-md overflow-hidden shadow-deep relative">
+    <div className="w-full h-full min-h-[190px] sm:min-h-[260px] md:min-h-[320px] lg:min-h-full aspect-[16/7] lg:aspect-auto rounded-md overflow-hidden shadow-deep relative">
       {offerImages.map((offer, i) => (
         <img
           src={offer.url}
@@ -38,7 +38,7 @@ const Offers = () => {
           height="500"
           fetchPriority={i === 0 ? "high" : "low"}
           loading={i === 0 ? "eager" : "lazy"}
-          className={`w-full h-full absolute object-fill ${
+          className={`w-full h-full absolute inset-0 object-cover lg:object-fill ${
             offer.direction
           } transition-opacity duration-1000 ease-in-out ${
             index === i ? "opacity-100" : "opacity-0 pointer-events-none"
